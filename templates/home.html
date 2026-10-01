@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Board{% endblock %}
+{% block body %}
+<section class="hero">
+  <h1>Take a number without the hallway.</h1>
+  <p class="lede">TAs post twenty-minute holds. Students grab one. If you cannot make it, cancel or pass the slot to a classmate.</p>
+</section>
+
+<table class="board">
+  <thead>
+    <tr>
+      <th>When</th>
+      <th>TA</th>
+      <th>Topic</th>
+      <th>Where</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for slot in slots %}
+      <tr>
+        <td>{{ slot.starts_at }}</td>
+        <td>{{ slot.ta_name }}</td>
+        <td>{{ slot.topic }}</td>
+        <td>{{ slot.location }}</td>
+        <td>
+          {% if slot.booking_id %}
+            <span class="pill taken">held</span>
+          {% elif current_user and current_user['role'] == 'student' %}
+            <form method="post" action="{{ url_for('book_slot', slot_id=slot.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit">Hold this</button>
+            </form>
+          {% elif not current_user %}
+            <a href="{{ url_for('login') }}">Sign in to hold</a>
+          {% endif %}
+        </td>
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="5">No slots posted yet.</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

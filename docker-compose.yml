@@ -1,0 +1,14 @@
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: "3000"
+      SECRET_KEY: ${SECRET_KEY:-officehours-dev-secret}
+    volumes:
+      - hold-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  hold-data:

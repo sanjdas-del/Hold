@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}My bookings{% endblock %}
+{% block body %}
+<section class="narrow wide">
+  <h1>My bookings</h1>
+  <p class="lede">Open a booking to read any note the TA left you. Need the same list on another computer? Create a one-time device link.</p>
+  {% if not bookings %}
+    <p class="lede">Nothing held yet. <a href="{{ url_for('home') }}">Grab a slot</a>.</p>
+  {% else %}
+    <ul class="list">
+      {% for booking in bookings %}
+        <li>
+          <a href="{{ url_for('booking_detail', booking_id=booking.id) }}">
+            <strong>{{ booking.starts_at }}</strong>
+            <span>{{ booking.topic }} · {{ booking.ta_name }}</span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <form method="post" action="{{ url_for('mine') }}" class="stack help">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <p>A device link signs in the other browser once, then stops working. It is not your session cookie, and it is not kept in the address bar of this page.</p>
+    <button type="submit">Create a one-time device link</button>
+  </form>
+  {% if handoff_url %}
+    <p class="help">Copy this into the other browser within 15 minutes. Opening it uses it up.</p>
+    <input class="code" readonly value="{{ handoff_url }}">
+  {% endif %}
+  <script src="{{ url_for('static', filename='js/select.js') }}"></script>
+</section>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Booking{% endblock %}
+{% block body %}
+<article class="narrow">
+  <p class="crumbs"><a href="{{ url_for('mine') }}">My bookings</a></p>
+  <h1>{{ booking.topic }}</h1>
+  <dl class="facts">
+    <div><dt>When</dt><dd>{{ booking.starts_at }}</dd></div>
+    <div><dt>Where</dt><dd>{{ booking.location }}</dd></div>
+    <div><dt>TA</dt><dd>{{ booking.ta_name }}</dd></div>
+    <div><dt>Student</dt><dd>{{ booking.student_email }}</dd></div>
+  </dl>
+  {% if booking.private_note and current_user['id'] == booking.student_id %}
+    <section class="note">
+      <h2>Note from your TA</h2>
+      <p>{{ booking.private_note }}</p>
+    </section>
+  {% endif %}
+  {% if current_user['id'] == booking.student_id %}
+    <div class="actions">
+      <form method="post" action="{{ url_for('cancel_booking', booking_id=booking.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit">Cancel this hold</button>
+      </form>
+      <form method="post" action="{{ url_for('transfer_booking', booking_id=booking.id) }}" class="stack">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label>
+          <span>Pass this slot to a classmate</span>
+          <input type="email" name="email" placeholder="classmate@campus.edu" required>
+        </label>
+        <button type="submit">Transfer</button>
+      </form>
+    </div>
+  {% endif %}
+</article>
+{% endblock %}

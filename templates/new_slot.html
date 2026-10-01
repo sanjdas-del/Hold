@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Post a slot{% endblock %}
+{% block body %}
+<section class="narrow">
+  <h1>Post a slot</h1>
+  {% if error %}<p class="flash error">{{ error }}</p>{% endif %}
+  <form method="post" action="{{ url_for('create_slot') }}" class="stack">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label><span>Starts at</span><input type="text" name="starts_at" placeholder="2026-09-20 14:00" required></label>
+    <label><span>Location</span><input type="text" name="location" required></label>
+    <label><span>Topic</span><input type="text" name="topic" required></label>
+    <button type="submit">Post slot</button>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Create account{% endblock %}
+{% block body %}
+<section class="narrow">
+  <h1>Create a Hold account</h1>
+  {% if error %}<p class="flash error">{{ error }}</p>{% endif %}
+  <form method="post" class="stack">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label><span>Campus email</span><input type="email" name="email" value="{{ values.email or '' }}" required></label>
+    <label><span>Display name</span><input type="text" name="display_name" value="{{ values.display_name or '' }}" required></label>
+    <label><span>Password</span><input type="password" name="password" minlength="8" required></label>
+    <button type="submit">Create account</button>
+  </form>
+</section>
+{% endblock %}

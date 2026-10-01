@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Hold{% endblock %} · Hold</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="shell">
+    <header class="top">
+      <a class="brand" href="{{ url_for('home') }}">
+        <span class="mark">H</span>
+        <span>
+          <strong>Hold</strong>
+          <em>Office hours, in twenty-minute slices</em>
+        </span>
+      </a>
+      <nav>
+        <a href="{{ url_for('home') }}">Board</a>
+        {% if current_user %}
+          <a href="{{ url_for('mine') }}">My bookings</a>
+          {% if current_user['role'] == 'ta' %}
+            <a href="{{ url_for('new_slot') }}">Post a slot</a>
+          {% endif %}
+          <form class="inline" method="post" action="{{ url_for('logout') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit">Sign out</button>
+          </form>
+        {% else %}
+          <a href="{{ url_for('login') }}">Sign in</a>
+          <a class="btn" href="{{ url_for('register') }}">Create account</a>
+        {% endif %}
+      </nav>
+    </header>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <p class="flash">{{ message }}</p>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <main>
+      {% block body %}{% endblock %}
+    </main>
+    <footer>Hold is an unofficial department board. If a slot disappears, check with the TA in person.</footer>
+  </div>
+</body>
+</html>

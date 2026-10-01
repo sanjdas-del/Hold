@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}My slots{% endblock %}
+{% block body %}
+<section>
+  <h1>Slots you posted</h1>
+  <table class="board">
+    <thead><tr><th>When</th><th>Topic</th><th>Held by</th></tr></thead>
+    <tbody>
+      {% for slot in slots %}
+        <tr>
+          <td>{{ slot.starts_at }}</td>
+          <td>{{ slot.topic }}</td>
+          <td>{{ slot.student_name or "open" }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="3">No slots yet. Post one when you have a free twenty minutes.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
